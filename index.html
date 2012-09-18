@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+        </title>
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+        <link rel="stylesheet" href="my.css" />
+        <style>
+            /* App custom styles */
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.js">
+        </script>
+        <script src="my.js">
+        </script>
+    </head>
+    <body>
+        <!-- Home -->
+        <div data-role="page" id="page1">
+            <div data-theme="a" data-role="header">
+                <h3>
+                    Lucky Image
+                </h3>
+            </div>
+            <div data-role="content" style="padding: 15px">
+                <div data-role="fieldcontain">
+                    <fieldset data-role="controlgroup">
+                        <label for="searchinput1">
+                        </label>
+                        <input name="" id="searchinput1" placeholder="" value="" type="search" />
+                    </fieldset>
+                </div>
+                <div style="position: relative; background-color: #fbfbfb; border: 1px solid #b8b8b8;">
+                    <img id="img" src="http://codiqa.com/static/images/v2/image.png" alt="image" style="margin-left: 5px; margin-top: 5px" />
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $("#searchinput1").keyup(function (e) {
+                    if(e.keyCode == 13) {
+                        var keyword = $("#searchinput1").attr("value");
+
+                        var key = "d02a9e5d9d45ecbf9c28ee11dc007a82";
+                        var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+key+"&tags="+keyword+"&per_page=20&sort=relevance";
+                        url += "&format=json&jsoncallback=?";
+                        $.getJSON(url, function(data){
+                                console.log(data);
+                                var rand = Math.floor(Math.random() * 20);
+                                var item = data.photos.photo[rand];
+                                var src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_n.jpg";
+                                $("#img").attr("src", src);
+                            });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
