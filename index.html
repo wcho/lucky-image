@@ -9,6 +9,30 @@
         <link rel="stylesheet" href="my.css" />
         <style>
             /* App custom styles */
+            .imageContainer {
+                text-align: center;
+            }
+            .imageContainer img {
+                display: block;
+                padding: 10px;
+                width: auto;
+                max-width:90%;
+            }
+            .imageContainer div {
+                position: relative;
+                display: inline-block;
+                /* if you need ie6/7 support */
+                *display: inline;
+                zoom: 1;
+            }
+            .imageContainer span {
+                position: absolute;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                background: #000;
+                background: rgba(0,0,0,.5);
+            }
         </style>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
         </script>
@@ -33,31 +57,67 @@
                         <input name="" id="searchinput1" placeholder="" value="" type="search" />
                     </fieldset>
                 </div>
-                <div style="position: relative; background-color: #fbfbfb; border: 1px solid #b8b8b8;">
-                    <img id="img" src="http://codiqa.com/static/images/v2/image.png" alt="image" style="margin-left: 5px; margin-top: 5px" />
+                <div class="imageContainer">
+                <div style="background-color: #fbfbfb; border: 1px solid #b8b8b8; max-width:100%;">
+                    <img id="img" src="http://codiqa.com/static/images/v2/image.png" alt="image" style="" />
+                    <img id="icon_wait" src="http://www.indiaclubdubai.com/courtbooking/images/icon_wait.gif"/
+                        style="display:none;">
+                </div>
                 </div>
             </div>
         </div>
         <script>
-            // get a random image of the keyword from Flickr
-            $(document).ready(function () {
-                $("#searchinput1").keyup(function (e) {
-                    if(e.keyCode == 13) {
-                        var keyword = $("#searchinput1").attr("value");
-
-                        var key = "d02a9e5d9d45ecbf9c28ee11dc007a82";
-                        var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="+key+"&tags="+keyword+"&per_page=20&sort=relevance";
-                        url += "&format=json&jsoncallback=?";
-                        $.getJSON(url, function(data){
-                                console.log(data);
-                                var rand = Math.floor(Math.random() * 20);
-                                var item = data.photos.photo[rand];
-                                var src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_n.jpg";
-                                $("#img").attr("src", src);
-                            });
-                    }
+        function getImageFromFlickr(keyword, callback) {
+            var perpage = 100;
+            var key = "d02a9e5d9d45ecbf9c28ee11dc007a82";
+            var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key="
+                        +key+"&tags="+keyword+"&per_page="+perpage+"&sort=interestingness-desc";
+            url += "&format=json&jsoncallback=?";
+            console.log(url);
+            $.getJSON(url, function(data){
+                    console.log(data);
+                    var rand = Math.floor(Math.random() * perpage);
+                    var item = data.photos.photo[rand];
+                    var src = "http://farm"+ item.farm +".static.flickr.com/"+ item.server +"/"+ item.id +"_"+ item.secret +"_n.jpg";
+                    callback(src);
+                    
                 });
+        }
+        function getImageFromNaver(keyword, callback) {
+            var url = "http://openapi.naver.com/search?key=258f4267b3e6221093bcc7f16050bad0&query="+keyword+"&target=image&start=1&display=100";
+            requestCrossDomain(url, function(data) {
+                var items = data.query.results.rss.channel.item;
+                console.log(items);
+                var rand = Math.floor(Math.random() * items.length);
+                callback(items[rand].link);
             });
+           
+        }
+        // Accepts a url and a callback function to run.
+        function requestCrossDomain( site, callback ) {
+        	var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
+        	$.getJSON( yql, callback );
+        }
+
+        // get a random image of the keyword from Flickr
+        $(document).ready(function () {
+
+            $("#searchinput1").keyup(function (e) {
+                if(e.keyCode == 13) {
+                    $("#img").css("display", "none");
+                    $("#icon_wait").css("display", "block");
+                    
+                    var keyword = $("#searchinput1").attr("value");
+                    var callback = function(src) {
+                        console.log(src);
+                        $("#img").attr("src", src).css("display", "block");
+                        $("#icon_wait").css("display", "none");
+                    };
+                    getImageFromNaver(keyword, callback);
+                    //getImageFromFlickr(keyword, callback);
+                }
+            });
+        });
         </script>
     </body>
 </html>
