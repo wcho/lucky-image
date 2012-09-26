@@ -1,1 +1,1 @@
-Shows random image from Flickr
+Shows random image from Flickr.
