@@ -1,6 +1,6 @@
-# lucky-image
+# lucky-image project
 
-Shows random image using Naver image search API
+Shows random image using Naver image search API.
 
 http://agit.core1/lucky-image
 
