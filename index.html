@@ -34,12 +34,10 @@
                 background: rgba(0,0,0,.5);
             }
         </style>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js">
-        </script>
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery.mobile/1.1.1/jquery.mobile-1.1.1.min.js">
-        </script>
-        <script src="my.js">
-        </script>
+        <script src="./cordova-2.2.0.js"></script>
+        <script src="./jquery.min.js"></script>
+        <script src="./jquery.mobile-1.1.1.min.js"></script>
+        <script src="./my.js"></script>
         <script>
         function getImageFromFlickr(keyword, callback) {
             var perpage = 100;
@@ -86,23 +84,37 @@
             $("#icon_wait").css("display", "none");
         }
 
-        // get a random image of the keyword from Flickr
-        $(document).ready(function () {
-            $("#searchinput1").keyup(function (e) {
-                if(e.keyCode == 13) {
-                    $("#img").css("display", "none");
-                    $("#icon_wait").css("display", "block");
-                    
-                    var keyword = $("#searchinput1").attr("value");
-
-                    getImageFromNaver(keyword, setImage);
-                    //getImageFromFlickr(keyword, callback);
-                }
-            });
-            //addGeoWatch();
-            addAccWatch();        
+        (function() {
+            var alreadySet = false;
             
-        });
+            function whenReady() {
+                if (! alreadySet) {
+                    if (navigator && navigator.accelerometer) {
+                        //addGeoWatch();
+                        alert("navigator.accelerometer!");
+                        addAccWatch();
+                    }
+                    alreadySet = true;
+                }
+            }
+            
+            // get a random image of the keyword from Flickr
+            $(document).ready(function() {
+                $("#searchinput1").keyup(function (e) {
+                    if(e.keyCode == 13) {
+                        $("#img").css("display", "none");
+                        $("#icon_wait").css("display", "block");
+                        
+                        var keyword = $("#searchinput1").attr("value");
+    
+                        getImageFromNaver(keyword, setImage);
+                        //getImageFromFlickr(keyword, callback);
+                    }
+                });
+                whenReady();
+            });
+            document.addEventListener("deviceready", whenReady, false);
+        })();
         
         // onSuccess Callback
         //   This method accepts a `Position` object, which contains
@@ -174,8 +186,6 @@
             }
         }
 
-        //document.addEventListener("deviceready", addGeoWatch, false);
-        
         </script>
     </head>
     <body>

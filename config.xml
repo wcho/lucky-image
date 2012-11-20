@@ -15,6 +15,8 @@
         Wooyoung Cho
     </author>
 
+    <preference name="phonegap-version" value="2.2.0"/>
+
     <gap:platforms>
         <gap:platform name="android" minVersion="2.1" />
     </gap:platforms>
