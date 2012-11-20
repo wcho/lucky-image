@@ -57,13 +57,14 @@
                     
                 });
         }
+        var lastKeyword;
         var naverItems;
         function getImageFromNaver(keyword, callback) {
             function pick() {
                 var rand = Math.floor(Math.random() * naverItems.length);
                 return naverItems[rand].link;
             }
-            if(naverItems) {
+            if(lastKeyword === keyword && naverItems) {
                 callback(pick());
             } else {
                 var url = "http://openapi.naver.com/search?key=258f4267b3e6221093bcc7f16050bad0&query="+keyword+"&target=image&start=1&display=100";
@@ -72,7 +73,6 @@
                     callback(pick());
                 });
             }
-           
         }
         // Accepts a url and a callback function to run.
         function requestCrossDomain( site, callback ) {
