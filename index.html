@@ -96,10 +96,10 @@
                         //addGeoWatch();
                         alert("navigator.accelerometer!");
                         addAccWatch();
+                        alreadySet = true;
                     } else {
                         alert('error ' + navigator + navigator.accelerometer);
                     }
-                    alreadySet = true;
                 }
             }
             
@@ -109,9 +109,7 @@
                     if(e.keyCode == 13) {
                         $("#img").css("display", "none");
                         $("#icon_wait").css("display", "block");
-                        
                         var keyword = $("#searchinput1").attr("value");
-    
                         getImageFromNaver(keyword, setImage);
                         //getImageFromFlickr(keyword, callback);
                     }
