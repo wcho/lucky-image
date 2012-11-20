@@ -144,10 +144,9 @@
         }
         
         function addAccWatch() {
-            var options = { frequency: 50 };
+            var options = { frequency: 200 };
             var watchID = navigator.accelerometer.watchAcceleration(accSuccess, onError, options);
             console.log("addAccWatch", watchID);
-            
         }
         
         var goAcc = true;
