@@ -88,11 +88,16 @@
             var alreadySet = false;
             
             function whenReady() {
+                alert('when ready');
                 if (! alreadySet) {
+                    alert('not alreadySet');
                     if (navigator && navigator.accelerometer) {
+                        alert('add acc watch');
                         //addGeoWatch();
                         alert("navigator.accelerometer!");
                         addAccWatch();
+                    } else {
+                        alert('error ' + navigator + navigator.accelerometer);
                     }
                     alreadySet = true;
                 }
@@ -111,6 +116,7 @@
                         //getImageFromFlickr(keyword, callback);
                     }
                 });
+                alert('document ready');
                 whenReady();
             });
             document.addEventListener("deviceready", whenReady, false);
